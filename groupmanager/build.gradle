@@ -1,0 +1,25 @@
+apply plugin: 'com.github.johnrengelman.shadow'
+
+repositories {
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://repo.lucko.me/' }
+}
+
+dependencies {
+    compile project(':common')
+    compileOnly 'org.bukkit:bukkit:1.15.2-R0.1-SNAPSHOT'
+
+    compileOnly 'org.anjocaido:GroupManager:1.4'
+}
+
+shadowJar {
+    dependencies {
+        include(dependency(':common'))
+    }
+
+    archiveBaseName.set('luckperms-migration-groupmanager')
+    archiveVersion.set('')
+    archiveClassifier.set('')
+}
+
+tasks.build.dependsOn tasks.shadowJar

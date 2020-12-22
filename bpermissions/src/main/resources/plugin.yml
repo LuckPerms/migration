@@ -1,0 +1,13 @@
+name: luckperms-migration-bpermissions
+version: 1
+main: me.lucko.luckperms.migration.MigrationBPermissions
+api-version: 1.13
+depend: [LuckPerms, bPermissions]
+
+commands:
+  migrate-bpermissions:
+    permission: luckperms.migration
+
+permissions:
+  luckperms.migration:
+    default: op

@@ -1,0 +1,13 @@
+name: luckperms-migration-permissionsbukkit
+version: 1
+main: me.lucko.luckperms.migration.MigrationPermissionsBukkit
+api-version: 1.13
+depend: [LuckPerms, PermissionsBukkit]
+
+commands:
+  migrate-permissionsbukkit:
+    permission: luckperms.migration
+
+permissions:
+  luckperms.migration:
+    default: op

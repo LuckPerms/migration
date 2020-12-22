@@ -1,0 +1,3 @@
+rootProject.name = 'luckperms-migration'
+
+include 'common', 'bpermissions', 'groupmanager', 'permissionsbukkit', 'permissionsex', 'powerranks', 'zpermissions', 'bungeeperms'

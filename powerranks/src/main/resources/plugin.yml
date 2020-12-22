@@ -1,0 +1,13 @@
+name: luckperms-migration-powerranks
+version: 1
+main: me.lucko.luckperms.migration.MigrationPowerRanks
+api-version: 1.13
+depend: [LuckPerms, PowerRanks]
+
+commands:
+  migrate-powerranks:
+    permission: luckperms.migration
+
+permissions:
+  luckperms.migration:
+    default: op

@@ -1,0 +1,13 @@
+name: luckperms-migration-groupmanager
+version: 1
+main: me.lucko.luckperms.migration.MigrationGroupManager
+api-version: 1.13
+depend: [LuckPerms, GroupManager]
+
+commands:
+  migrate-groupmanager:
+    permission: luckperms.migration
+
+permissions:
+  luckperms.migration:
+    default: op

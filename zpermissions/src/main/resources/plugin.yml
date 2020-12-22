@@ -1,0 +1,13 @@
+name: luckperms-migration-zpermissions
+version: 1
+main: me.lucko.luckperms.migration.MigrationZPermissions
+api-version: 1.13
+depend: [LuckPerms, zPermissions]
+
+commands:
+  migrate-zpermissions:
+    permission: luckperms.migration
+
+permissions:
+  luckperms.migration:
+    default: op

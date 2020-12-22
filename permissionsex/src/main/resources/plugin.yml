@@ -1,0 +1,13 @@
+name: luckperms-migration-permissionsex
+version: 1
+main: me.lucko.luckperms.migration.MigrationPermissionsEx
+api-version: 1.13
+depend: [LuckPerms, PermissionsEx]
+
+commands:
+  migrate-permissionsex:
+    permission: luckperms.migration
+
+permissions:
+  luckperms.migration:
+    default: op

@@ -1,0 +1,4 @@
+name: luckperms-migration-bungeeperms
+version: '1'
+main: me.lucko.luckperms.migration.MigrationBungeePerms
+depends: [LuckPerms, BungeePerms]
