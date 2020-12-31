@@ -1,0 +1,13 @@
+name: luckperms-migration-ultrapermissions
+version: 1
+main: me.lucko.luckperms.migration.MigrationUltraPermissions
+api-version: 1.13
+depend: [LuckPerms, UltraPermissions]
+
+commands:
+  migrate-ultrapermissions:
+    permission: luckperms.migration
+
+permissions:
+  luckperms.migration:
+    default: op
