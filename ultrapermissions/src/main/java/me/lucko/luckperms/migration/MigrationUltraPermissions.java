@@ -71,17 +71,18 @@ public final class MigrationUltraPermissions extends JavaPlugin {
         // Migrate all groups
         log(sender, "Starting group migration.");
 
-        AtomicInteger maxWeight = new AtomicInteger(0);
-        AtomicInteger groupCount = new AtomicInteger(0);
+        int maxWeight = ultraPermsApi.getGroups().stream()
+                .mapToInt(g -> g.getPriority())
+                .max()
+                .orElse(0) + 5;
 
+        AtomicInteger groupCount = new AtomicInteger(0);
         Iterators.tryIterate(ultraPermsApi.getGroups(), group -> {
             String groupName = MigrationUtils.standardizeName(group.getName());
+            int weight = maxWeight - group.getPriority();
+
             Group lpGroup = this.luckPerms.getGroupManager().createAndLoadGroup(groupName).join();
-
-            int weight = group.getPriority();
-            maxWeight.set(Math.max(maxWeight.get(), weight));
             MigrationUtils.setGroupWeight(lpGroup, weight);
-
             copy(group, lpGroup, weight);
 
             for (me.TechsCode.UltraPermissions.storage.objects.Group inherited : group.getActiveInheritedGroups()) {
@@ -100,13 +101,12 @@ public final class MigrationUltraPermissions extends JavaPlugin {
         // Migrate all users.
         log(sender, "Starting user migration.");
 
-        maxWeight.addAndGet(10);
-        AtomicInteger userCount = new AtomicInteger(0);
+        int userWeight = maxWeight + 5;
 
+        AtomicInteger userCount = new AtomicInteger(0);
         Iterators.tryIterate(ultraPermsApi.getUsers(), user -> {
             User lpUser = this.luckPerms.getUserManager().loadUser(user.getUuid(), user.getName()).join();
-
-            copy(user, lpUser, maxWeight.get());
+            copy(user, lpUser, userWeight);
 
             for (UserRankup inheritance : user.getRankups()) {
                 me.TechsCode.UltraPermissions.storage.objects.Group inherited = inheritance.getGroup().get().orElse(null);

@@ -114,9 +114,8 @@ public final class MigrationPermissionsEx extends JavaPlugin {
         AtomicInteger groupCount = new AtomicInteger(0);
         Set<String> ladders = new HashSet<>();
         Iterators.tryIterate(manager.getGroupList(), group -> {
+            String groupName = MigrationUtils.standardizeName(group.getName());
             int groupWeight = maxWeight - group.getRank();
-
-            final String groupName = MigrationUtils.standardizeName(group.getName());
 
             Group lpGroup = this.luckPerms.getGroupManager().createAndLoadGroup(groupName).join();
 
