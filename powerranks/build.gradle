@@ -9,7 +9,7 @@ dependencies {
     compile project(':common')
     compileOnly 'org.bukkit:bukkit:1.15.2-R0.1-SNAPSHOT'
 
-    compileOnly('nl.svenar:powerranks:1.9.2') {
+    compileOnly('nl.svenar:powerranks:1.9.9') {
         exclude(module: 'nametagedit')
     }
 }
