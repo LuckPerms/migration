@@ -32,7 +32,6 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.types.InheritanceNode;
 
 import nl.svenar.PowerRanks.Cache.CachedPlayers;
-import nl.svenar.PowerRanks.Cache.PowerConfigurationSection;
 import nl.svenar.PowerRanks.Data.Users;
 import nl.svenar.PowerRanks.PowerRanks;
 import nl.svenar.PowerRanks.api.PowerRanksAPI;
@@ -40,6 +39,7 @@ import nl.svenar.PowerRanks.api.PowerRanksAPI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Set;
@@ -106,7 +106,7 @@ public final class MigrationPowerRanks extends JavaPlugin {
 
             user.data().add(InheritanceNode.builder(CachedPlayers.getString("players." + uuidString + ".rank")).build());
 
-            final PowerConfigurationSection subGroups = CachedPlayers.getConfigurationSection("players." + uuidString + ".subranks");
+            final ConfigurationSection subGroups = CachedPlayers.getConfigurationSection("players." + uuidString + ".subranks");
             if (subGroups != null) {
                 for (String subGroup : subGroups.getKeys(false)) {
                     InheritanceNode.Builder builder = InheritanceNode.builder(subGroup);
