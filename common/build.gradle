@@ -1,3 +1,10 @@
+apply plugin: 'java-library'
+
+repositories {
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+}
+
 dependencies {
-    compile 'net.luckperms:api:5.2'
+    api 'net.luckperms:api:5.2'
+    compileOnly 'org.bukkit:bukkit:1.15.2-R0.1-SNAPSHOT'
 }

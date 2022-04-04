@@ -36,9 +36,7 @@ import nl.svenar.PowerRanks.Data.Users;
 import nl.svenar.PowerRanks.PowerRanks;
 import nl.svenar.PowerRanks.api.PowerRanksAPI;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,7 +44,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public final class MigrationPowerRanks extends JavaPlugin {
+public final class MigrationPowerRanks extends MigrationJavaPlugin {
     private LuckPerms luckPerms;
     private PowerRanks pr;
 
@@ -56,15 +54,8 @@ public final class MigrationPowerRanks extends JavaPlugin {
         this.pr = JavaPlugin.getPlugin(PowerRanks.class);
     }
 
-    private void log(CommandSender sender, String msg) {
-        getLogger().info(msg);
-        if (!(sender instanceof ConsoleCommandSender)) {
-            sender.sendMessage("[migration] " + msg);
-        }
-    }
-
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public void runMigration(CommandSender sender, String[] args) {
         log(sender, "Starting.");
 
         PowerRanksAPI prApi = pr.loadAPI();
@@ -137,7 +128,6 @@ public final class MigrationPowerRanks extends JavaPlugin {
         log(sender, "Success! Migration complete.");
         log(sender, "Don't forget to remove the PowerRanks jar from your plugins folder & restart the server. " +
                 "LuckPerms may not take over as the server permission handler until this is done.");
-        return true;
     }
 
     public UUID lookupUuid(String s) {

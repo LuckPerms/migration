@@ -40,9 +40,7 @@ import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
 import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.bukkit.World;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -55,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public final class MigrationGroupManager extends JavaPlugin {
+public final class MigrationGroupManager extends MigrationJavaPlugin {
     private LuckPerms luckPerms;
     private GroupManager gm;
 
@@ -65,15 +63,8 @@ public final class MigrationGroupManager extends JavaPlugin {
         this.gm = JavaPlugin.getPlugin(GroupManager.class);
     }
 
-    private void log(CommandSender sender, String msg) {
-        getLogger().info(msg);
-        if (!(sender instanceof ConsoleCommandSender)) {
-            sender.sendMessage("[migration] " + msg);
-        }
-    }
-
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public void runMigration(CommandSender sender, String[] args) {
         log(sender, "Starting.");
 
         final boolean migrateAsGlobal;
@@ -87,7 +78,7 @@ public final class MigrationGroupManager extends JavaPlugin {
 
         if (!getServer().getPluginManager().isPluginEnabled("GroupManager")) {
             log(sender, "Plugin not loaded.");
-            return true;
+            return;
         }
 
         List<String> worlds = getServer().getWorlds().stream().map(World::getName).map(String::toLowerCase).collect(Collectors.toList());
@@ -264,8 +255,6 @@ public final class MigrationGroupManager extends JavaPlugin {
         log(sender, "Success! Migration complete.");
         log(sender, "Don't forget to remove the GroupManager jar from your plugins folder & restart the server. " +
                 "LuckPerms may not take over as the server permission handler until this is done.");
-
-        return true;
     }
 
     public UUID lookupUuid(String s) {

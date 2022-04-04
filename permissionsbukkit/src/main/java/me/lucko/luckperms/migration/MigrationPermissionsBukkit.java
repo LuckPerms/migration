@@ -34,9 +34,7 @@ import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.types.InheritanceNode;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,7 +43,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public final class MigrationPermissionsBukkit extends JavaPlugin {
+public final class MigrationPermissionsBukkit extends MigrationJavaPlugin {
     private LuckPerms luckPerms;
     private PermissionsPlugin permissionsBukkit;
 
@@ -55,15 +53,8 @@ public final class MigrationPermissionsBukkit extends JavaPlugin {
         this.permissionsBukkit = JavaPlugin.getPlugin(PermissionsPlugin.class);
     }
 
-    private void log(CommandSender sender, String msg) {
-        getLogger().info(msg);
-        if (!(sender instanceof ConsoleCommandSender)) {
-            sender.sendMessage("[migration] " + msg);
-        }
-    }
-
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public void runMigration(CommandSender sender, String[] args) {
         log(sender, "Starting.");
 
         FileConfiguration config = permissionsBukkit.getConfig();
@@ -119,7 +110,6 @@ public final class MigrationPermissionsBukkit extends JavaPlugin {
         log(sender, "Success! Migration complete.");
         log(sender, "Don't forget to remove the PermissionsBukkit jar from your plugins folder & restart the server. " +
                 "LuckPerms may not take over as the server permission handler until this is done.");
-        return true;
     }
 
     private static void migrate(PermissionHolder holder, ConfigurationSection data) {

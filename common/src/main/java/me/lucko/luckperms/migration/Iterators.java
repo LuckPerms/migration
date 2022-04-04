@@ -25,9 +25,6 @@
 
 package me.lucko.luckperms.migration;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -71,32 +68,6 @@ public final class Iterators {
             }
         }
         return success;
-    }
-
-    public static <I, O> boolean tryIterate(I[] array, Function<I, O> mapping, Consumer<O> action) {
-        boolean success = true;
-        for (I element : array) {
-            try {
-                action.accept(mapping.apply(element));
-            } catch (Exception e) {
-                e.printStackTrace();
-                success = false;
-            }
-        }
-        return success;
-    }
-
-    public static <E> List<List<E>> divideIterable(Iterable<E> source, int size) {
-        List<List<E>> lists = new ArrayList<>();
-        Iterator<E> it = source.iterator();
-        while (it.hasNext()) {
-            List<E> subList = new ArrayList<>();
-            for (int i = 0; it.hasNext() && i < size; i++) {
-                subList.add(it.next());
-            }
-            lists.add(subList);
-        }
-        return lists;
     }
 
 }

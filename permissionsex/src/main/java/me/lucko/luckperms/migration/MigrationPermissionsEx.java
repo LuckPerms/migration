@@ -39,9 +39,7 @@ import net.luckperms.api.node.types.PrefixNode;
 import net.luckperms.api.node.types.SuffixNode;
 import net.luckperms.api.track.Track;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ru.tehkode.permissions.NativeInterface;
@@ -67,7 +65,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public final class MigrationPermissionsEx extends JavaPlugin {
+public final class MigrationPermissionsEx extends MigrationJavaPlugin {
     private LuckPerms luckPerms;
     private PermissionsEx pex;
 
@@ -77,20 +75,13 @@ public final class MigrationPermissionsEx extends JavaPlugin {
         this.pex = JavaPlugin.getPlugin(PermissionsEx.class);
     }
 
-    private void log(CommandSender sender, String msg) {
-        getLogger().info(msg);
-        if (!(sender instanceof ConsoleCommandSender)) {
-            sender.sendMessage("[migration] " + msg);
-        }
-    }
-
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public void runMigration(CommandSender sender, String[] args) {
         log(sender, "Starting.");
 
         if (!getServer().getPluginManager().isPluginEnabled("PermissionsEx")) {
             log(sender, "Plugin not loaded.");
-            return true;
+            return;
         }
 
         PermissionManager manager = this.pex.getPermissionsManager();
@@ -198,7 +189,6 @@ public final class MigrationPermissionsEx extends JavaPlugin {
         log(sender, "Success! Migration complete.");
         log(sender, "Don't forget to remove the PermissionsEx jar from your plugins folder & restart the server. " +
                 "LuckPerms may not take over as the server permission handler until this is done.");
-        return true;
     }
 
     private static final Method GET_DATA_METHOD;

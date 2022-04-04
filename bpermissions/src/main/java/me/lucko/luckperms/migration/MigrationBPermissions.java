@@ -42,12 +42,9 @@ import net.luckperms.api.node.types.MetaNode;
 import net.luckperms.api.node.types.PrefixNode;
 import net.luckperms.api.node.types.SuffixNode;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -55,7 +52,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public final class MigrationBPermissions extends JavaPlugin {
+public final class MigrationBPermissions extends MigrationJavaPlugin {
     private LuckPerms luckPerms;
 
     @Override
@@ -63,21 +60,14 @@ public final class MigrationBPermissions extends JavaPlugin {
         this.luckPerms = getServer().getServicesManager().load(LuckPerms.class);
     }
 
-    private void log(CommandSender sender, String msg) {
-        getLogger().info(msg);
-        if (!(sender instanceof ConsoleCommandSender)) {
-            sender.sendMessage("[migration] " + msg);
-        }
-    }
-
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public void runMigration(CommandSender sender, String[] args) {
         log(sender, "Starting.");
 
         WorldManager worldManager = WorldManager.getInstance();
         if (worldManager == null) {
             log(sender, "Plugin not loaded.");
-            return true;
+            return;
         }
 
         log(sender, "Forcing the plugin to load all data. This could take a while.");
@@ -103,7 +93,7 @@ public final class MigrationBPermissions extends JavaPlugin {
             Set<String> users = configSection.getKeys(false);
             if (users == null) {
                 log(sender, "Couldn't get a list of users.");
-                return true;
+                return;
             }
 
             AtomicInteger userLoadCount = new AtomicInteger(0);
@@ -173,7 +163,6 @@ public final class MigrationBPermissions extends JavaPlugin {
         log(sender, "Success! Migration complete.");
         log(sender, "Don't forget to remove the bPermissions jar from your plugins folder & restart the server. " +
                 "LuckPerms may not take over as the server permission handler until this is done.");
-        return true;
     }
 
     private static final Field UCONFIG_FIELD;

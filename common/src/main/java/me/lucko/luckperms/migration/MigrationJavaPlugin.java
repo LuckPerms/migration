@@ -25,35 +25,26 @@
 
 package me.lucko.luckperms.migration;
 
-import java.util.UUID;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
 
-/**
- * Utilities for working with {@link UUID}s.
- */
-public final class Uuids {
-    private Uuids() {}
+public abstract class MigrationJavaPlugin extends JavaPlugin {
 
-    public static UUID fromString(String s) {
-        try {
-            return UUID.fromString(s);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+    @Override
+    public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        getServer().getScheduler().runTaskAsynchronously(this, () -> runMigration(sender, args));
+        return true;
     }
 
-    public static UUID parse(String s) {
-        UUID uuid = fromString(s);
-        if (uuid == null && s.length() == 32) {
-            try {
-                uuid = new UUID(
-                        Long.parseUnsignedLong(s.substring(0, 16), 16),
-                        Long.parseUnsignedLong(s.substring(16), 16)
-                );
-            } catch (NumberFormatException e) {
-                // ignore
-            }
+    protected abstract void runMigration(CommandSender sender, String[] args);
+
+    protected void log(CommandSender sender, String msg) {
+        getLogger().info(msg);
+        if (!(sender instanceof ConsoleCommandSender)) {
+            sender.sendMessage("[migration] " + msg);
         }
-        return uuid;
     }
 
 }

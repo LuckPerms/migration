@@ -37,10 +37,7 @@ import net.luckperms.api.node.types.PrefixNode;
 import net.luckperms.api.node.types.SuffixNode;
 import net.luckperms.api.track.Track;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.tyrannyofheaven.bukkit.zPermissions.ZPermissionsService;
 import org.tyrannyofheaven.bukkit.zPermissions.dao.PermissionService;
 import org.tyrannyofheaven.bukkit.zPermissions.model.EntityMetadata;
@@ -56,7 +53,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public final class MigrationZPermissions extends JavaPlugin {
+public final class MigrationZPermissions extends MigrationJavaPlugin {
     private LuckPerms luckPerms;
 
     @Override
@@ -64,15 +61,8 @@ public final class MigrationZPermissions extends JavaPlugin {
         this.luckPerms = getServer().getServicesManager().load(LuckPerms.class);
     }
 
-    private void log(CommandSender sender, String msg) {
-        getLogger().info(msg);
-        if (!(sender instanceof ConsoleCommandSender)) {
-            sender.sendMessage("[migration] " + msg);
-        }
-    }
-
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public void runMigration(CommandSender sender, String[] args) {
         log(sender, "Starting.");
 
         ZPermissionsService service = getServer().getServicesManager().load(ZPermissionsService.class);
@@ -83,7 +73,7 @@ public final class MigrationZPermissions extends JavaPlugin {
             internalService = (PermissionService) psField.get(service);
         } catch (Exception e) {
             e.printStackTrace();
-            return true;
+            return;
         }
 
         // Migrate all groups
@@ -185,7 +175,6 @@ public final class MigrationZPermissions extends JavaPlugin {
         log(sender, "Success! Migration complete.");
         log(sender, "Don't forget to remove the zPermissions jar from your plugins folder & restart the server. " +
                 "LuckPerms may not take over as the server permission handler until this is done.");
-        return true;
     }
 
     private void migrateEntity(PermissionHolder holder, PermissionEntity entity, int weight) {
